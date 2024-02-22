@@ -36,6 +36,7 @@ class Game_Music_TableModel(Base):
 class Game_Result_TableModel(Base):
     __tablename__ = "game_result "
 
+    order_data = Column(Integer, primary_key=True, nullable=False)
     game_result_player_id = Column(String, nullable=False)
     game_result_music_id = Column(String, nullable=False)
     game_result_socre = Column(Integer, nullable=False)
