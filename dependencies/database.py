@@ -31,9 +31,8 @@ def init_db(config: DefaultConfig) -> None:
 
     try:
         # 데이터베이스 연결 시도
-        with db_engine.connect() as connection:
-            # 연결 성공 시 메시지 출력
-            print("데이터베이스 연결 성공")
+        connection = db_engine.connect()
+        print("데이터베이스 연결 성공")
     except Exception as e:
         # 연결 실패 시 예외 처리 및 오류 메시지 출력
         print(f"데이터베이스 연결 실패: {e}")
