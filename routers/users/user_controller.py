@@ -50,7 +50,7 @@ async def get(
     ).dict()
 
 
-@router.get(f'/api')
+@router.get(f'api')
 async def apiAwake(db=Depends(provide_session)):
     user_service = UserService(user_repository=UserRepository(session=db))
     user_info = user_service.get_user(id=3321)  # 3321 아이디의 사용자 정보 가져오기
