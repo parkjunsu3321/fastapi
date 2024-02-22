@@ -30,13 +30,20 @@ def init_db(config: DefaultConfig) -> None:
 
     db_engine = create_async_engine(db_url)
 
+    try:
+        # 연결 시도
+        with db_engine.connect():
+            print("데이터베이스 연결 성공")
+    except Exception as e:
+        # 연결 실패 시 예외 처리
+        print(f"데이터베이스 연결 실패: {e}")
+
     DBSessionLocal = sessionmaker(
         bind=db_engine,
         autoflush=False,
         expire_on_commit=False,
         class_=AsyncSession,
     )
-    print("연결 성공")
 
 async def provide_session():
     if DBSessionLocal is None:
