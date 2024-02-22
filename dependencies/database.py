@@ -27,23 +27,20 @@ def init_db(config: DefaultConfig) -> None:
         + f"@{postgres_endpoint}:{postgres_port}/{postgres_table}"
     )
 
-    db_engine = create_async_engine(db_url)
-
     try:
-        # 데이터베이스 연결 시도
-        connection = db_engine.connect()
-        print("데이터베이스 연결 성공")
+        db_engine = create_async_engine(db_url)
+        DBSessionLocal = sessionmaker(
+            bind=db_engine,
+            autoflush=False,
+            expire_on_commit=False,
+            class_=AsyncSession,
+        )
+        print("Database connection successful.")
     except Exception as e:
-        # 연결 실패 시 예외 처리 및 오류 메시지 출력
-        print(f"데이터베이스 연결 실패: {e}")
-        print(db_url)
+        print(f"Database connection failed. Reason: {str(e)}")
+        print(f"Failed URL: {db_url}")
 
-    DBSessionLocal = sessionmaker(
-        bind=db_engine,
-        autoflush=False,
-        expire_on_commit=False,
-        class_=AsyncSession,
-    )
+    
 
 async def provide_session():
     if DBSessionLocal is None:
