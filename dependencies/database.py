@@ -37,6 +37,7 @@ def init_db(config: DefaultConfig) -> None:
     except Exception as e:
         # 연결 실패 시 예외 처리 및 오류 메시지 출력
         print(f"데이터베이스 연결 실패: {e}")
+        print(db_url)
 
     DBSessionLocal = sessionmaker(
         bind=db_engine,
