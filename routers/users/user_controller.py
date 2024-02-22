@@ -50,6 +50,6 @@ async def get(
     ).dict()
 
 
-@router.get(f'api') 
+@router.get('/api') 
 async def apiAwake(db=Depends(provide_session)):
     return "hello"
