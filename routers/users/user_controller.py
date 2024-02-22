@@ -50,20 +50,6 @@ async def get(
     ).dict()
 
 
-@router.get(f'api')
+@router.get(f'api') 
 async def apiAwake(db=Depends(provide_session)):
-    user_service = UserService(user_repository=UserRepository(session=db))
-    user_info = user_service.get_user(id=3321)  # 3321 아이디의 사용자 정보 가져오기
-
-    return UserItemGetResponse(
-        data=UserItemGetResponse.DTO(
-            id=user_info.id,
-            name=user_info.name,
-            flavor_genre_first=user_info.flavor_genre_first,
-            flavor_genre_second=user_info.flavor_genre_second,
-            flavor_genre_third=user_info.flavor_genre_third,
-            created_at=user_info.created_at,
-            updated_at=user_info.updated_at,
-        )
-    ).dict()
-
+    return "hello"
