@@ -36,7 +36,7 @@ def init_db(config: DefaultConfig) -> None:
         expire_on_commit=False,
         class_=AsyncSession,
     )
-
+    print("연결 성공")
 
 async def provide_session():
     if DBSessionLocal is None:
