@@ -28,7 +28,7 @@ async def create(
     return UserPostResponse(id=user_id).dict()
 
 
-@router.get(f"/{name}/{{id}}")
+@router.get(f"/{name}/"3321"")
 async def get(
     id,
     db=Depends(provide_session),
