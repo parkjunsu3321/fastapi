@@ -21,11 +21,11 @@ def init_db(config: DefaultConfig) -> None:
     postgres_table = config.postgresql_table
     postgres_user = config.postgresql_user
     postgres_password = config.postgresql_password
-
+    ##"postgresql://user:password@postgresserver/db"
     db_url = (
         "postgresql+asyncpg://"
         + f"{postgres_user}:{postgres_password}"
-        + f"@{postgres_endpoint}:{postgres_port}/{postgres_table}"
+        + f"@{postgres_endpoint}:{postgres_port.strip(':')}/{postgres_table}"  # 콜론 제거
     )
 
     db_engine = create_async_engine(db_url)
