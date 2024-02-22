@@ -28,9 +28,9 @@ async def create(
     return UserPostResponse(id=user_id).dict()
 
 
-@router.get(f"/{name}/{{user_id}}")
+@router.get(f"/{name}/{{id}}")
 async def get(
-    user_id,
+    id,
     db=Depends(provide_session),
 ) -> UserItemGetResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
