@@ -35,7 +35,7 @@ async def get(
 ) -> UserItemGetResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
 
-    user_info = user_service.get_user(user_id=user_id)
+    user_info = user_service.get_user(id=id)
 
     return UserItemGetResponse(
         data=UserItemGetResponse.DTO(
