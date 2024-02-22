@@ -21,7 +21,6 @@ def init_db(config: DefaultConfig) -> None:
     postgres_table = config.postgresql_table
     postgres_user = config.postgresql_user
     postgres_password = config.postgresql_password
-    ##"postgresql://user:password@postgresserver/db"
     db_url = (
         "postgresql+asyncpg://"
         + f"{postgres_user}:{postgres_password}"
@@ -31,11 +30,12 @@ def init_db(config: DefaultConfig) -> None:
     db_engine = create_async_engine(db_url)
 
     try:
-        # 연결 시도
-        with db_engine.connect():
+        # 데이터베이스 연결 시도
+        with db_engine.connect() as connection:
+            # 연결 성공 시 메시지 출력
             print("데이터베이스 연결 성공")
     except Exception as e:
-        # 연결 실패 시 예외 처리
+        # 연결 실패 시 예외 처리 및 오류 메시지 출력
         print(f"데이터베이스 연결 실패: {e}")
 
     DBSessionLocal = sessionmaker(
