@@ -33,3 +33,10 @@ class Game_Music_TableModel(Base):
         server_onupdate=func.utc_timestamp(),
     )
 
+class Game_Result_TableModel(Base):
+    __tablename__ = "game_result "
+
+    game_result_player_id = Column(String, nullable=False)
+    game_result_music_id = Column(String, nullable=False)
+    game_result_socre = Column(Integer, nullable=False)
+    game_result_created_time = Column(DateTime, server_default=func.utc_timestamp())
