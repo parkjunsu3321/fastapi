@@ -33,9 +33,9 @@ async def create(
 
 
 @router.get(f'/{name}/{"all"}')
-async def get(order_data: int, db=Depends(provide_session)):
+async def get(db=Depends(provide_session)):
     gameresult_service = GameResultService(game_result_repository=GameResultRepository(session=db))
-    game_result_info = await gameresult_service.get_game_result(order_data=order_data)
+    game_result_info = await gameresult_service.get_all_game_results()
     
     if game_result_info:
         return GameResultItemGetResponse(
