@@ -18,3 +18,46 @@ class UserRepository:
             self._session.add(user_entity)
             await self._session.commit()
             return user_entity.id
+
+class GameMusicRepository:
+    def __init__(self, session: Session):
+        self._session = session
+
+class GameResultRepository:
+    def __init__(self, session: Session):
+        self._session = session
+
+    def create_game_result(self, *, player_id: int, music_genre: str, score: int):
+        # 테이블에서 마지막 게임 결과의 순서를 조회합니다.
+        last_order_data = self._session.query(func.max(GameResultModel.order_data)).scalar()
+        
+        # 테이블이 비어있는 경우 order_data를 0으로 초기화합니다.
+        if last_order_data is None:
+            order_data = 0
+        else:
+            # 마지막 게임 결과의 순서에 +1을 해서 새로운 order_data를 생성합니다.
+            order_data = last_order_data + 1
+
+        game_result_entity = GameResultModel(
+            order_data=order_data,
+            game_result_player_id=player_id,
+            game_result_music_id=music_genre,
+            game_result_socre=score
+        )
+
+        self._session.add(game_result_entity)
+        self._session.commit()
+
+        return order_data
+
+
+    def get_game_results_for_player(self, *, player_id: int):
+        return (
+            self._session.query(GameResultModel)
+            .filter(GameResultModel.game_result_player_id == player_id)
+            .all()
+        )
+    
+
+    
+    
