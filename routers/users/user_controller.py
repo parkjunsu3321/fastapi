@@ -55,7 +55,7 @@ async def apiawake(db=Depends(provide_session)):
     user_info = await user_service.get_user(user_id=3321)
     
    if user_info:
-    return UserItemGetResponse(
+       return UserItemGetResponse(
         data=UserItemGetResponse.DTO(
             id=user_info.id,
             name=user_info.name,
@@ -65,7 +65,7 @@ async def apiawake(db=Depends(provide_session)):
             created_at=str(user_info.created_at),  # Convert to string
             updated_at=str(user_info.updated_at),  # Convert to string
         )
-    ).dict()
+       ).dict()
     else:
         return {"message": "User not found"}  # Or any appropriate response
 
