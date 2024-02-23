@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from dependencies.database import provide_session
+from fastapi.routing import get_base_url
 
 from domains.users.services import UserService
 from domains.users.repositories import UserRepository
@@ -11,6 +12,7 @@ from domains.users.dto import (
 
 name = "users"
 router = APIRouter()
+print(get_base_url())
 
 @router.post(f"/{name}/create")
 async def create(
