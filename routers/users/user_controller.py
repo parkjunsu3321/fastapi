@@ -50,5 +50,5 @@ async def get(
 
 
 @router.get("/api") 
-async def apiAwake(db=Depends(provide_session)):
+async def apiAwake():
     return "hello"
