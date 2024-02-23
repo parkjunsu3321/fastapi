@@ -39,10 +39,6 @@ async def exception_handler(request: Request, exc: Exception):
     logging.error(traceback.format_exc())
     return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
-# /docs, /redoc 리디렉션 처리
-@app.get("/")
-async def root():
-    return RedirectResponse(url="/docs")
 
 if __name__ == "__main__":
     import uvicorn
