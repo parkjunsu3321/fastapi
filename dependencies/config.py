@@ -4,12 +4,12 @@ from pydantic_settings import BaseSettings
 
 
 class DefaultConfig(BaseSettings):
-    postgresql_endpoint: str = os.getenv("POSTGRESQL_ENDPOINT", "svc.sel4.cloudtype.app")
-    postgresql_port: int = os.getenv("POSTGRESQL_PORT", 32752)
-    postgresql_table: str = os.getenv("POSTGRESQL_TABLE", "reaction_db")
-    postgresql_user: str = os.getenv("POSTGRESQL_USER", "root")
-    postgresql_password: str = os.getenv("POSTGRESQL_PASSWORD", "3321")
-
+    postgresql_endpoint: str = os.getenv("POSTGRESQL_ENDPOIN", "svc.sel4.cloudtype.app")
+    postgresql_port: int = os.getenv("POSTGRESQL_POR", 32752)
+    postgresql_table: str = os.getenv("POSTGRESQL_TABL", "reaction_db")
+    postgresql_user: str = os.getenv("POSTGRESQL_USE", "root")
+    postgresql_password: int = os.getenv("POSTGRESQL_PASSWOR", 3321)
+    print(postgresql_endpoint+postgresql_port+postgresql_table+postgresql_user+postgresql_password)
 
 @lru_cache
 def get_config():
