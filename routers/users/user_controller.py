@@ -29,7 +29,7 @@ async def create(
 
 @router.get(f'/{name}/{{id}}')
 async def get(
-    id,
+    users_id,
     db=Depends(provide_session),
 ) -> UserItemGetResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
