@@ -9,7 +9,6 @@ class DefaultConfig(BaseSettings):
     postgresql_table: str = os.getenv("POSTGRESQL_TABL", "reaction_db")
     postgresql_user: str = os.getenv("POSTGRESQL_USE", "root")
     postgresql_password: int = os.getenv("POSTGRESQL_PASSWOR", 3321)
-    print(postgresql_endpoint+postgresql_port+postgresql_table+postgresql_user+postgresql_password)
 
 @lru_cache
 def get_config():
