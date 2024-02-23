@@ -31,7 +31,7 @@ app.add_middleware(
 app.include_router(router=main_router)
 
 # 데이터베이스 초기화
-# init_db(config=get_config())
+init_db(config=get_config())
 
 # 예외 처리
 @app.exception_handler(Exception)
