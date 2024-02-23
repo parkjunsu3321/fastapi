@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from .models import UserModel
+from .models import GameResultModel
 
 class UserRepository:
     def __init__(self, session: AsyncSession):
