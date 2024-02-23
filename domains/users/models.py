@@ -5,7 +5,7 @@ from dependencies.database import Base
 
 
 class UserModel(Base):
-    __tablename__ = "Users"
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
