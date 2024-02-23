@@ -49,22 +49,25 @@ async def get(
     ).dict()
 
 
-@router.get("/api") 
-async def apiAwake(db=Depends(provide_session)):
+@router.get("/apiawake")  # Renamed the endpoint for clarity
+async def apiawake(db=Depends(provide_session)):
     user_service = UserService(user_repository=UserRepository(session=db))
-    user_info = user_service.get_user(user_id=3321)
-    return UserItemGetResponse(
-        data=UserItemGetResponse.DTO(
-            id=user_info.id,
-            name=user_info.name,
-            flavor_genre_first=user_info.flavor_genre_first,
-            flavor_genre_second=user_info.flavor_genre_second,
-            flavor_genre_third=user_info.flavor_genre_third,
-            created_at=user_info.created_at,
-            updated_at=user_info.updated_at,
-        )
-    ).dict()
-    return "apiAwake"
+    user_info = await user_service.get_user(user_id=3321)
+    
+    if user_info:
+        return UserItemGetResponse(
+            data=UserItemGetResponse.DTO(
+                id=user_info.id,
+                name=user_info.name,
+                flavor_genre_first=user_info.flavor_genre_first,
+                flavor_genre_second=user_info.flavor_genre_second,
+                flavor_genre_third=user_info.flavor_genre_third,
+                created_at=user_info.created_at,
+                updated_at=user_info.updated_at,
+            )
+        ).dict()
+    else:
+        return {"message": "User not found"}  # Or any appropriate response
 
 @router.get("/test/") 
 async def apiTest():
