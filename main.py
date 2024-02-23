@@ -33,10 +33,7 @@ app.include_router(router=main_router)
 init_db(config=get_config())
 
 
-# 404 에러 처리
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request: Request, exc: HTTPException):
-    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
 
 
 # 예외 처리
