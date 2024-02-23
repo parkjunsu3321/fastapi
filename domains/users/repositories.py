@@ -20,7 +20,7 @@ class UserRepository:
             return user_entity.id
 
 class GameMusicRepository:
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self._session = session
 
 class GameResultRepository:
