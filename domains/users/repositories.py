@@ -50,7 +50,6 @@ class GameResultRepository:
 
         return order_data
 
-
     def get_game_results_for_player(self, *, player_id: int):
         return (
             self._session.query(GameResultModel)
