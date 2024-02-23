@@ -64,6 +64,7 @@ async def apiAwake(db=Depends(provide_session)):
             updated_at=user_info.updated_at,
         )
     ).dict()
+    return "apiAwake"
 
 @router.get("/test") 
 async def apiTest():
