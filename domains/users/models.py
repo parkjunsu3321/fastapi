@@ -34,7 +34,7 @@ class GameMusicModel(Base):
     )
 
 class GameResultModel(Base):
-    __tablename__ = "game_result "
+    __tablename__ = "game_result"
 
     order_data = Column(Integer, primary_key=True, nullable=False)
     game_result_player_id = Column(String, nullable=False)
