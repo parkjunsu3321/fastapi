@@ -39,5 +39,5 @@ class GameResultModel(Base):
     order_data = Column(Integer, primary_key=True, nullable=False)
     game_result_player_id = Column(String, nullable=False)
     game_result_music_id = Column(String, nullable=False)
-    game_result_socre = Column(Integer, nullable=False)
+    game_result_score = Column(Integer, nullable=False)
     game_result_created_time = Column(DateTime, server_default=func.utc_timestamp())
