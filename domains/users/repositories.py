@@ -1,27 +1,23 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from .models import UserModel
 
-
 class UserRepository:
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self._session = session
 
-    def get_user(self, *, user_id: int):
-        return (
-            self._session.query(UserModel)
-            .filter(
-                UserModel.id == user_id,
+    async def get_user(self, *, user_id: int):
+        async with self._session() as session:
+            result = await session.execute(
+                select(UserModel).filter(UserModel.id == user_id)
             )
-            .first()
-        )
+            return result.scalar_one_or_none()
 
-    def create_user(self, *, user_name: str, password: str):
-        user_entity = UserModel(
-            name=user_name,
-            password=password,
-        )
-
-        self._session.add(user_entity)
-        self._session.commit()
-
-        return user_entity.id
+    async def create_user(self, *, user_name: str, password: str):
+        async with self._session() as session:
+            user_entity = UserModel(
+                name=user_name,
+                password=password,
+            )
+            session.add(user_entity)
+            await session.commit()
+            return user_entity.id
