@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from .models import UserModel
 
 class UserRepository:
@@ -6,16 +7,14 @@ class UserRepository:
         self._session = session
 
     async def get_user(self, *, user_id: int):
-        async with self._session() as session:  # Create session properly
-            return (
-                await session.query(UserModel)
-                .filter(UserModel.id == user_id)
-                .first()
-            )
+        async with self._session.begin():
+            result = await self._session.execute(select(UserModel).where(UserModel.id == user_id))
+            user = result.scalars().first()
+            return user
 
     async def create_user(self, *, user_name: str, user_pw: str):
-        async with self._session() as session:  # Create session properly
+        async with self._session.begin():
             user_entity = UserModel(name=user_name, password=user_pw)
-            session.add(user_entity)
-            await session.commit()
+            self._session.add(user_entity)
+            await self._session.commit()
             return user_entity.id
