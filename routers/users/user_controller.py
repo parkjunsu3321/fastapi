@@ -52,3 +52,7 @@ async def get(
 @router.get("/api") 
 async def apiAwake():
     return "hello"
+
+@router.get("/") 
+async def apiwake():
+    return "hello"
