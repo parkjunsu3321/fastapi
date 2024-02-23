@@ -27,9 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 정적 파일 제공
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 # 라우터 추가
 app.include_router(router=main_router)
 
