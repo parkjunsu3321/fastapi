@@ -34,7 +34,7 @@ async def get(
 ) -> UserItemGetResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
 
-    user_info = user_service.get_user(id=id)
+    user_info = user_service.get_user(user_id=user_id)
 
     return UserItemGetResponse(
         data=UserItemGetResponse.DTO(
@@ -52,7 +52,7 @@ async def get(
 @router.get("/api") 
 async def apiAwake(db=Depends(provide_session)):
     user_service = UserService(user_repository=UserRepository(session=db))
-    user_info = user_service.get_user(id=3321)
+    user_info = user_service.get_user(user_id=3321)
     return UserItemGetResponse(
         data=UserItemGetResponse.DTO(
             id=user_info.id,
