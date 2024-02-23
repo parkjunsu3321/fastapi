@@ -20,7 +20,7 @@ class UserModel(Base):
         server_onupdate=func.utc_timestamp(),
     )
 
-class Game_Music_TableModel(Base):
+class GameMusicModel(Base):
     __tablename__ = "game_music"
 
     game_music_id = Column(String, primary_key=True, nullable=False)
@@ -33,7 +33,7 @@ class Game_Music_TableModel(Base):
         server_onupdate=func.utc_timestamp(),
     )
 
-class Game_Result_TableModel(Base):
+class GameResultModel(Base):
     __tablename__ = "game_result "
 
     order_data = Column(Integer, primary_key=True, nullable=False)
