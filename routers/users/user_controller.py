@@ -27,7 +27,7 @@ async def create(
     return UserPostResponse(id=user_id).dict()
 
 
-@router.get(f'/{name}/{{uesr_id}}')
+@router.get(f'/{name}/{{user_id}}')
 async def get(user_id: int, db=Depends(provide_session)):
     user_service = UserService(user_repository=UserRepository(session=db))
     user_info = await user_service.get_user(user_id=user_id)
@@ -46,7 +46,6 @@ async def get(user_id: int, db=Depends(provide_session)):
         ).dict()
     else:
         return {"message": "User not found"}  # Or any appropriate response
-
 
 
 @router.get("/apiawake")  # Renamed the endpoint for clarity
