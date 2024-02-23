@@ -28,7 +28,25 @@ async def create(
 
 
 @router.get(f'/{name}/{{uesr_id}}')
-async def get(db=Depends(provide_session)):
+async def get(user_id: int, db=Depends(provide_session)):
+    user_service = UserService(user_repository=UserRepository(session=db))
+    user_info = await user_service.get_user(user_id=user_id)
+    
+    if user_info:
+        return UserItemGetResponse(
+            data=UserItemGetResponse.DTO(
+                id=user_info.id,
+                name=user_info.name,
+                flavor_genre_first=user_info.flavor_genre_first or "",  # If None, set to empty string
+                flavor_genre_second=user_info.flavor_genre_second or "",  # If None, set to empty string
+                flavor_genre_third=user_info.flavor_genre_third or "",  # If None, set to empty string
+                created_at=str(user_info.created_at),  # Convert to string
+                updated_at=str(user_info.updated_at),  # Convert to string
+            )
+        ).dict()
+    else:
+        return {"message": "User not found"}  # Or any appropriate response
+
     user_service = UserService(user_repository=UserRepository(session=db))
     user_info = await user_service.get_user(user_id=user_id)
     
