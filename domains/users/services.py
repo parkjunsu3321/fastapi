@@ -3,7 +3,8 @@ from fastapi import HTTPException, status
 
 from .repositories import UserRepository
 from .models import UserModel
-
+from .repositories import GameResultRepository
+from .models import GameResultModel
 
 class UserService(Service):
     def __init__(
@@ -31,3 +32,31 @@ class UserService(Service):
             password=user_pw,
         )
         return user_id
+
+class GameResultService(Service):
+    def __init__(
+        self,
+        *,
+        game_result_repository: GameResultRepository,
+    ):
+        self._game_result_repository = game_result_repository
+
+    async def create_game_result(self, *, player_id: int, music_genre: str, score: int) -> int:
+        order_data = await self._game_result_repository.create_game_result(
+            player_id=player_id,
+            music_genre=music_genre,
+            score=score,
+        )
+        return order_data
+
+    async def get_game_results_for_player(self, *, player_id: int) -> list[GameResultModel]:
+        game_results = await self._game_result_repository.get_game_results_for_player(player_id=player_id)
+
+        # If no game results are found for the player, raise NotFound.
+        if not game_results:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No game results found for this player",
+            )
+
+        return game_results
