@@ -49,7 +49,9 @@ class GameResultRepository:
 
             return order_data
 
-    async def get_all_game_results(self):
+    async def get_all_game_results(self) -> list[GameResultModel]:
         async with self._session.begin():
-            return await self._session.execute(select(GameResultModel).all())
+            query = select(GameResultModel)
+            return (await self._session.execute(query)).scalars().all()
+
 
