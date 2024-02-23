@@ -64,3 +64,7 @@ async def apiAwake(db=Depends(provide_session)):
             updated_at=user_info.updated_at,
         )
     ).dict()
+
+@router.get("/test") 
+async def apiTest():
+    return "성공";
