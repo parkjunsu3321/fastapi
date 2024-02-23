@@ -52,4 +52,5 @@ async def get(
 
 @router.get('/api') 
 async def apiAwake(db=Depends(provide_session)):
+    print(f"apiAwake 함수를 호출하기 위한 주소: {router.prefix}/api")
     return "hello"
