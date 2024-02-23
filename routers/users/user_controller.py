@@ -69,3 +69,8 @@ async def apiAwake(db=Depends(provide_session)):
 @router.get("/test") 
 async def apiTest():
     return "testing";
+
+@router.get("/") 
+async def apiTest():
+    return {"hello":"world"};
+
