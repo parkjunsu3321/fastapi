@@ -21,3 +21,25 @@ class UserPostRequest(BaseModel):
 
 class UserPostResponse(BaseModel):
     id: int
+
+
+
+class GameMusicItemGetResponse(BaseModel):
+    class DTO(BaseModel):
+        game_music_id: str
+        game_music_link_fragment: str
+        game_music_genre_name: str
+        game_music_created_at: str
+        game_music_updated_at: str
+    data: DTO
+
+
+class GameResultItemGetResponse(BaseModel):
+    class DTO(BaseModel):
+        order_data: int
+        game_result_player_id: str
+        game_result_music_id: str
+        game_result_score: int
+        game_result_created_time: str
+
+    data: DTO

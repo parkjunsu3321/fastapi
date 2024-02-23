@@ -49,13 +49,7 @@ class GameResultRepository:
 
             return order_data
 
-    async def get_game_results_for_player(self, *, player_id: int):
+    async def get_all_game_results(self):
         async with self._session.begin():
-            return (
-                await self._session.execute(
-                    select(GameResultModel)
-                    .filter(GameResultModel.game_result_player_id == player_id)
-                    .all()
-                )
-            )
+            return await self._session.execute(select(GameResultModel).all())
 

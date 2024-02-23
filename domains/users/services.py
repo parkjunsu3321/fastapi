@@ -49,14 +49,11 @@ class GameResultService(Service):
         )
         return order_data
 
-    async def get_game_results_for_player(self, *, player_id: int) -> list[GameResultModel]:
-        game_results = await self._game_result_repository.get_game_results_for_player(player_id=player_id)
-
-        # If no game results are found for the player, raise NotFound.
+    async def get_all_game_results(self) -> list[GameResultModel]:
+        game_results = await self._game_result_repository.get_all_game_results()
         if not game_results:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="No game results found for this player",
-            )
-
+                detail="No game results found",
+                )
         return game_results
