@@ -52,7 +52,7 @@ async def create(
 async def checkId(
     payload: UserPostRequest,
     db=Depends(provide_session),
-) -> UserPostResponse:
+) -> bool:
     user_service = UserService(user_repository=UserRepository(session=db))
 
     checking = await user_service.checkname_user(
