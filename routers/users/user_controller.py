@@ -36,7 +36,7 @@ async def create(
 ) -> UserPostResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
 
-    user_id = user_service.create_user(
+    user_id = await user_service.create_user(
         user_name=payload.user_name,
         user_pw=payload.user_password,
     )
@@ -125,3 +125,6 @@ async def login(
 
     access_token = create_access_token(data={"sub": user.id})
     return Token(token=access_token, type="bearer")
+
+
+#보안..이슈..
