@@ -25,12 +25,13 @@ class UserRepository:
     async def checkname_user(self, *, user_name: str):
         async with self._session.begin():
             # 기존에 해당 이름의 사용자가 있는지 확인
-            existing_user = await self._session.query(UserModel).filter_by(name=user_name).first()
-        
+            query = await self._session.execute(select(UserModel).filter_by(name=user_name))
+            existing_user = await query.fetchone()
+    
             if existing_user is not None:
                 # 이미 사용자가 존재하므로 중복되었다고 판단하여 False 반환
                 return False
-        
+    
             # 사용자가 존재하지 않으므로 True 반환
             return True
 
