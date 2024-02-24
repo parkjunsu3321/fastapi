@@ -2,7 +2,11 @@ import os
 from functools import lru_cache
 from pydantic_settings import BaseSettings
 
-SECRET_KEY: str = os.getenv("SECRET_KEY", "")
+jwt_secret_key: str = os.getenv(
+        "JWT_SECRET_KEY",
+        "5c2fea6305c8c209714e73b265958703e65c4b40dec4c388dddac06f3f791ec7",
+    )
+jwt_expire_minutes: int = os.getenv("JWT_TOKEN_EXPIRE_MINUTES", 600)
 
 class DefaultConfig(BaseSettings):
     postgresql_endpoint: str = os.getenv("POSTGRESQL_ENDPOINT", "svc.sel4.cloudtype.app")

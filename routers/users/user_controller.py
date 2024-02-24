@@ -11,7 +11,7 @@ from domains.users.dto import (
     UserPostResponse,
 )
 from dependencies.database import provide_session
-from dependencies.config import SECRET_KEY
+from dependencies.config import get_config
 from dependencies.auth import(
     Token,
     verify_password,
@@ -22,6 +22,9 @@ from domains.users.dto import GameResultItemGetResponse
 from domains.users.services import GameResultService
 from domains.users.repositories import GameResultRepository
 
+
+conf_vars = get_config()
+secret_key = conf_vars.jwt_secret_key
 name = "users"
 result = "result"
 router = APIRouter()
@@ -93,7 +96,7 @@ async def plz(db=Depends(provide_session)):
 async def protected_endpoint(authorization: str = Header(...)):
     try:
         token = authorization.split("Bearer ")[1]
-        payload = jwt.decode_jwt(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode_jwt(token, secret_key, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
         # 여기서 user_id를 사용하여 해당 사용자의 데이터를 처리하거나 작업을 수행할 수 있습니다.
         return {"message": f"Welcome user {user_id} to the protected endpoint"}
