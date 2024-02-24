@@ -33,12 +33,12 @@ class UserService(Service):
         )
         return user_id
     
-    def get_user_by_name(self, *, user_name: str) -> UserModel:
-        user_entity = self._user_repository.get_user_by_name(
+    async def get_user_by_name(self, *, user_name: str) -> UserModel:
+        user_entity = await self._user_repository.get_user_by_name(
             user_name=user_name,
         )
         return user_entity
-
+    
 class GameResultService(Service):
     def __init__(
         self,
