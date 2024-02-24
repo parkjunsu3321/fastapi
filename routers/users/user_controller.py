@@ -102,7 +102,8 @@ async def protected_endpoint(authorization: str = Header(...)):
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
-        user_id: str = payload.get("sub")
+        user_id: int = payload.get("sub")
+        print(payload.get("sub"))
         # 여기서 user_id를 사용하여 해당 사용자의 데이터를 처리하거나 작업을 수행할 수 있습니다.
         return {"message": f"Welcome user {user_id} to the protected endpoint"}
     except JWTError:
