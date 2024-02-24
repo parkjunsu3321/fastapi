@@ -2,7 +2,7 @@ import arrow
 from fastapi import APIRouter, HTTPException, status, Form, Depends
 from dependencies.database import provide_session
 from fastapi import Header
-from python_jose import JWTError, jwt
+from jose import JWTError, jwt
 from domains.users.services import UserService
 from domains.users.repositories import UserRepository
 from domains.users.dto import (
@@ -128,4 +128,3 @@ async def login(
 
     access_token = create_access_token(data={"sub": user.id})
     return Token(token=access_token, type="bearer")
-#보안..이슈..
