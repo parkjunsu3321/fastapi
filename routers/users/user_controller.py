@@ -118,8 +118,6 @@ async def login(
 ) -> Token:
     user_service = UserService(user_repository=UserRepository(session=db))
     user = await user_service.get_user_by_name(user_name=login_data.user_name)
-    print(login_data.user_password)
-    print(user.password)
     
     if not verify_password(login_data.user_password, user.password):
         raise HTTPException(

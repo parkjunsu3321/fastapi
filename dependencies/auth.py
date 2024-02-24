@@ -93,7 +93,8 @@ def get_current_user_id(token: Token) -> TokenData:
 
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    user_hashed_password = hash_password(plain_password)
+    return pwd_context.verify(user_hashed_password, hashed_password)
 
 
 def hash_password(password):

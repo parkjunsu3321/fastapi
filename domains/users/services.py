@@ -1,6 +1,6 @@
 from domains import Service
 from fastapi import HTTPException, status
-
+from dependencies.auth import hash_password
 from .repositories import UserRepository
 from .models import UserModel
 from .repositories import GameResultRepository
@@ -27,9 +27,10 @@ class UserService(Service):
         return user
 
     def create_user(self, *, user_name, user_pw) -> int:
+        hashed_pw = hash_password(user_pw)
         user_id = self._user_repository.create_user(
             user_name=user_name,
-            user_pw=user_pw,
+            user_pw=hashed_pw,
         )
         return user_id
     
