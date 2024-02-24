@@ -21,7 +21,11 @@ from dependencies.auth import(
 from domains.users.dto import GameResultItemGetResponse
 from domains.users.services import GameResultService
 from domains.users.repositories import GameResultRepository
+from pydantic import BaseModel
 
+class LoginForm(BaseModel):
+    user_name: str
+    user_password: str
 
 conf_vars = get_config()
 secret_key = conf_vars.jwt_secret_key
@@ -109,14 +113,13 @@ async def protected_endpoint(authorization: str = Header(...)):
     
 @router.post(f"/{name}/login")
 async def login(
-    user_name: str = Form(...),
-    user_password: str = Form(...),
+    login_data: LoginForm,
     db=Depends(provide_session),
 ) -> Token:
     user_service = UserService(user_repository=UserRepository(session=db))
-    user = user_service.get_user_by_name(user_name=user_name)
+    user = user_service.get_user_by_name(user_name=login_data.user_name)
 
-    if not verify_password(user_password, user.password):
+    if not verify_password(login_data.user_password, user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="비밀번호가 틀립니다.",
@@ -125,6 +128,4 @@ async def login(
 
     access_token = create_access_token(data={"sub": user.id})
     return Token(token=access_token, type="bearer")
-
-
 #보안..이슈..
