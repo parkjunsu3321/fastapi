@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import HTTPException, status
 from sqlalchemy.future import select
 from .models import UserModel
 from .models import GameResultModel
@@ -19,6 +20,19 @@ class UserRepository:
             self._session.add(user_entity)
             await self._session.commit()
             return user_entity.id
+        
+    async def get_user_by_name(self, *, user_name: str):
+        async with self._session.begin():
+            query = select(UserModel).filter(UserModel.name == user_name)
+            result = await self._session.execute(query)
+            user = result.scalars().first()
+        
+            if user is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="유저 정보가 없습니다.",
+                )
+            return user
 
 class GameMusicRepository:
     def __init__(self, session: AsyncSession):
