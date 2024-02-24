@@ -2,7 +2,8 @@ import arrow
 from fastapi import APIRouter, HTTPException, status, Form, Depends
 from dependencies.database import provide_session
 from fastapi import Header
-from jose import JWTError, jwt
+from jose import JWTError
+import jwt
 from domains.users.services import UserService
 from domains.users.repositories import UserRepository
 from domains.users.dto import (
@@ -104,7 +105,7 @@ async def protected_endpoint(authorization: str = Header(...)):
         print(token)
         print(secret_key,ALGORITHM)
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
-        print(payload)
+        print("a")
         user_id: int = payload.get("sub")
         print(payload.get("sub"))
         # 여기서 user_id를 사용하여 해당 사용자의 데이터를 처리하거나 작업을 수행할 수 있습니다.
