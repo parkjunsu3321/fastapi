@@ -46,18 +46,19 @@ async def provide_session():
     if DBSessionLocal is None:
         raise ImportError("You need to call init_db before this function")
 
-    async with sessionmaker(
+    async_session = DBSessionLocal(
         bind=db_engine,
         autoflush=False,
         expire_on_commit=False,
-        class_=AsyncSession,
-    )() as session:
-        try:
+    )
+    try:
+        async with async_session as session:
             yield session
-        except Exception as e:
-            session.rollback()
-            raise e
-        else:
-            session.commit()
-        finally:
-            session.close()
+    except Exception as e:
+        await session.rollback()
+        raise e
+    else:
+        await session.commit()
+    finally:
+        await session.close()
+
