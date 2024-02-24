@@ -22,7 +22,7 @@ class UserRepository:
             await self._session.commit()
             return user_entity.id
         
-    async def checkId_user(self, *, user_name: str):
+    async def checkname_user(self, *, user_name: str):
         async with self._session.begin():
             # 기존에 해당 이름의 사용자가 있는지 확인
             existing_user = await self._session.query(UserModel).filter_by(name=user_name).first()

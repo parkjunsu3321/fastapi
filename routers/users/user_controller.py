@@ -54,7 +54,8 @@ async def checkId(
     db=Depends(provide_session),
 ) -> UserPostResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
-    checking = await user_service.checkId_user(
+
+    checking = await user_service.checkname_user(
         user_name=payload.user_name,
     )
     return checking.dict()
