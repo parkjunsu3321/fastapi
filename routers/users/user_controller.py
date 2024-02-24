@@ -102,7 +102,7 @@ async def protected_endpoint(authorization: str = Header(...)):
     try:
         token = authorization.split("Bearer ")[1]
         print(token)
-        print(secret_key,' ',ALGORITHM)
+        print(secret_key,ALGORITHM)
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         print(payload)
         user_id: int = payload.get("sub")
