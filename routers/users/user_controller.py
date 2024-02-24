@@ -58,7 +58,7 @@ async def checkId(
     checking = await user_service.checkname_user(
         user_name=payload.user_name,
     )
-    return checking.dict()
+    return checking
 
 @router.get(f'/{result}/{"all"}')
 async def get(db=Depends(provide_session)):
