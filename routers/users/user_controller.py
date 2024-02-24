@@ -48,6 +48,16 @@ async def create(
 
     return UserPostResponse(id=user_id).dict()
 
+@router.post(f"/{name}/checkId")
+async def checkId(
+    payload: UserPostRequest,
+    db=Depends(provide_session),
+) -> UserPostResponse:
+    user_service = UserService(user_repository=UserRepository(session=db))
+    checking = await user_service.checkId_user(
+        user_name=payload.user_name,
+    )
+    return checking.dict()
 
 @router.get(f'/{result}/{"all"}')
 async def get(db=Depends(provide_session)):

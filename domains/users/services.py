@@ -34,6 +34,10 @@ class UserService(Service):
         )
         return user_id
     
+    def checkId_user(self, *, user_name) -> bool:
+        checking = self._user_repository.checkId_user(user_name=user_name)
+        return checking
+
     async def get_user_by_name(self, *, user_name: str) -> UserModel:
         user_entity = await self._user_repository.get_user_by_name(
             user_name=user_name,
