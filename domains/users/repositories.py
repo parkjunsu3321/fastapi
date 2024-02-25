@@ -53,8 +53,7 @@ class UserRepository:
             user = query.scalar()
             if user is not None:
                 user.password = new_password
-                if user.password != new_password:
-                    return True
+                return True
         return False
 
 
