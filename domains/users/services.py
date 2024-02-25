@@ -39,7 +39,7 @@ class UserService(Service):
         return checking_name
 
     def get_password(self, *, user_id) -> str:
-        get_password = self._user_repository.check_password(user_id=user_id)
+        get_password = self._user_repository.get_password(user_id=user_id)
         return get_password
 
 
