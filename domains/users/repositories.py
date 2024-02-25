@@ -64,11 +64,7 @@ class UserRepository:
                 await self._session.delete(user)
                 await self._session.flush()  # 변경 사항을 일시적으로 세션에 반영
                 await self._session.commit()  # 유저 삭제 후에 세션을 커밋
-                # 삭제된 사용자가 없음을 확인
-                query_deleted_user = await self._session.execute(select(UserModel).filter_by(id=user_id))
-                user_after_delete = query_deleted_user.scalar()
-                if user_after_delete is None:
-                    return True  # 삭제 작업이 성공적으로 수행됨을 반환
+                return True  # 삭제 작업이 성공적으로 수행됨을 반환
         return False  # 삭제 작업 실패
 
 
