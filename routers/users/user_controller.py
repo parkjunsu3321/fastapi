@@ -17,6 +17,7 @@ from dependencies.auth import(
     Token,
     verify_password,
     create_access_token,
+    hash_password,
     ALGORITHM,
 )
 from domains.users.dto import GameResultItemGetResponse
@@ -155,6 +156,7 @@ async def check_passwrod(request_data: dict, authorization: str = Header(...), d
 async def check_passwrod(request_data: dict, authorization: str = Header(...), db=Depends(provide_session))->bool:
     new_password = request_data.get("new_password")
     try:
+        hasded_new_pw = hash_password(new_password)
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         user_id: int = payload.get("sub")

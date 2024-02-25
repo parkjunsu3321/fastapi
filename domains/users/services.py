@@ -35,8 +35,7 @@ class UserService(Service):
         return user_id
     
     async def change_password(self, *, user_id, new_pw) -> bool:
-        hasded_new_pw = hash_password(new_pw)
-        check_changing = await self._user_repository.change_password(user_id=user_id, new_password=hasded_new_pw)
+        check_changing = await self._user_repository.change_password(user_id=user_id, new_password=new_pw)
         return check_changing
 
     def checkname_user(self, *, user_name) -> str:

@@ -52,6 +52,7 @@ class UserRepository:
             query = await self._session.execute(select(UserModel).filter_by(id=user_id))
             user = query.scalar()
             if user is not None:
+                user.password = new_password
                 return user.password
         return None
 
