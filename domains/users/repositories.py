@@ -10,6 +10,7 @@ class UserRepository:
         self._session = session
 
     async def get_user(self, *, user_id: int):
+        user_id = int(user_id)
         async with self._session.begin():
             result = await self._session.execute(select(UserModel).where(UserModel.id == user_id))
             user = result.scalars().first()
