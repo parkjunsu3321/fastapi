@@ -190,7 +190,7 @@ async def delete_user(request_data: dict, authorization: str = Header(...), db=D
                 detail="비밀번호가 틀립니다.",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        delete_user_data = await user_service.delete_user(user_id=user_id)  # 이 부분에서 delete_user_data 변수를 할당
+        delete_user_data = await user_service.delete_user(user_id=user_id)
         return delete_user_data
     except JWTError:
         raise HTTPException(

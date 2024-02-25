@@ -62,6 +62,7 @@ class UserRepository:
             user = query.scalar()
             if user is not None:
                 self._session.delete(user)
+                await self._session.commit()  # 유저 삭제 후에 세션을 커밋
                 return True
         return None
 
