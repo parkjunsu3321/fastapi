@@ -38,7 +38,7 @@ class UserRepository:
 
     async def get_password(self, *, user_id: int) -> str:
         async with self._session.begin():
-            query = await self._session.execute(select(UserModel).filter_by(user_id=user_id))
+            query = await self._session.execute(select(UserModel).filter_by(id=user_id))
             existing_user = query.fetchone()
 
             if existing_user is not None:
