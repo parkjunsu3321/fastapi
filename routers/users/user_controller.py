@@ -161,8 +161,8 @@ async def check_passwrod(request_data: dict, authorization: str = Header(...), d
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         user_id: int = payload.get("sub")
         user_service = UserService(user_repository=UserRepository(session=db))
-        chaning_pw = user_service.change_password(user_id=user_id, new_pw=new_password)
-        if chaning_pw == new_password:
+        chaning_pw = user_service.change_password(user_id=user_id, new_pw=hasded_new_pw)
+        if chaning_pw == hasded_new_pw:
             return True
         else:
             return False
