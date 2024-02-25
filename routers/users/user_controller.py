@@ -151,6 +151,23 @@ async def check_passwrod(request_data: dict, authorization: str = Header(...), d
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+@router.post(f"/{name}/check_passwrod")
+async def check_passwrod(request_data: dict, authorization: str = Header(...), db=Depends(provide_session))->bool:
+    new_password = request_data.get("new_password")
+    try:
+        token = authorization.split("Bearer ")[1]
+        payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
+        user_id: int = payload.get("sub")
+        user_service = UserService(user_repository=UserRepository(session=db))
+        chaning_pw = user_service.change_password(user_id=user_id, new_pw=new_password)
+        return chaning_pw
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        
     
 @router.post(f"/{name}/login")
 async def login(

@@ -47,7 +47,16 @@ class UserRepository:
         # 사용자가 존재하지 않으면 None을 반환
         return None
 
-    
+    async def change_password(self, *, user_id: int, new_password: str) -> bool:
+        async with self._session.begin():
+            query = await self._session.execute(select(UserModel).filter_by(id=user_id))
+            user = query.scalar()
+            if user is not None:
+                user.password = new_password
+                return True
+        return False
+
+
     async def get_user_by_name(self, *, user_name: str):
         async with self._session.begin():
             query = select(UserModel).filter(UserModel.name == user_name)
