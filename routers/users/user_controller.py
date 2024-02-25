@@ -151,7 +151,7 @@ async def check_passwrod(request_data: dict, authorization: str = Header(...), d
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-@router.post(f"/{name}/check_passwrod")
+@router.post(f"/{name}/changing_passwrod")
 async def check_passwrod(request_data: dict, authorization: str = Header(...), db=Depends(provide_session))->bool:
     new_password = request_data.get("new_password")
     try:
