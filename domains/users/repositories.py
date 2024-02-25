@@ -39,12 +39,11 @@ class UserRepository:
     async def get_password(self, *, user_id: int) -> str:
         async with self._session.begin():
             query = await self._session.execute(select(UserModel).filter_by(id=user_id))
-            existing_user = query.fetchone()
+            user_password = query.scalar().password
 
-            if existing_user is not None:
+            if user_password is not None:
                 # 사용자가 존재하면 해당 사용자의 비밀번호를 반환
-                return existing_user.password
-    
+                return user_password 
         # 사용자가 존재하지 않으면 None을 반환
         return None
 
