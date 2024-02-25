@@ -87,7 +87,7 @@ async def apiTest():
     return {"hello":"world"}
 
 
-@router.post(f"/{name}/{{user_id}}")
+@router.post(f"/{name}/getInfo")
 async def getInfo(user_id, db=Depends(provide_session),) -> UserItemGetResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
     user_info = await user_service.get_user(user_id=user_id)
