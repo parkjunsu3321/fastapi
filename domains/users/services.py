@@ -37,6 +37,10 @@ class UserService(Service):
     async def change_password(self, *, user_id, new_pw) -> str:
         check_changing = await self._user_repository.change_password(user_id=user_id, new_password=new_pw)
         return check_changing
+    
+    async def delete_user(self, *, user_id):
+        delete_user_result = await self._user_repository.delete_user(user_id=user_id)
+        return delete_user_result
 
     def checkname_user(self, *, user_name) -> str:
         checking_name = self._user_repository.checkname_user(user_name=user_name)

@@ -56,6 +56,14 @@ class UserRepository:
                 return user.password
         return None
 
+    async def delete_user(self, *, user_id: int):
+        async with self._session.begin():
+            query = await self._session.execute(select(UserModel).filter_by(id=user_id))
+            user = query.scalar()
+            if user is not None:
+                self._session.delete(user)
+                return True
+        return None
 
     async def get_user_by_name(self, *, user_name: str):
         async with self._session.begin():
