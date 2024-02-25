@@ -62,9 +62,12 @@ class UserRepository:
             user = query.scalar()
             if user is not None:
                 self._session.delete(user)
+                await self._session.flush()  # 변경 사항을 일시적으로 세션에 반영
                 await self._session.commit()  # 유저 삭제 후에 세션을 커밋
-                return True
-        return None
+                if self._session.get(UserModel, user_id) is None:
+                    return True  # 삭제 작업이 성공적으로 수행됨을 반환
+        return False  # 삭제 작업 실패
+
 
     async def get_user_by_name(self, *, user_name: str):
         async with self._session.begin():
