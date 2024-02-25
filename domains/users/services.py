@@ -35,8 +35,13 @@ class UserService(Service):
         return user_id
     
     def checkname_user(self, *, user_name) -> bool:
-        checking = self._user_repository.checkname_user(user_name=user_name)
-        return checking
+        checking_name = self._user_repository.checkname_user(user_name=user_name)
+        return checking_name
+
+    def get_password(self, *, user_id) -> str:
+        get_password = self._user_repository.check_password(user_id=user_id)
+        return get_password
+
 
     async def get_user_by_name(self, *, user_name: str) -> UserModel:
         user_entity = await self._user_repository.get_user_by_name(

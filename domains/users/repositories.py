@@ -36,6 +36,17 @@ class UserRepository:
             # 사용자가 존재하지 않으므로 True 반환
             return True
 
+    async def get_password(self, *, user_id: int) -> str:
+        async with self._session.begin():
+            query = await self._session.execute(select(UserModel).filter_by(user_id=user_id))
+            existing_user = query.fetchone()
+
+            if existing_user is not None:
+                # 사용자가 존재하면 해당 사용자의 비밀번호를 반환
+                return existing_user.password
+    
+        # 사용자가 존재하지 않으면 None을 반환
+        return None
 
     
     async def get_user_by_name(self, *, user_name: str):
