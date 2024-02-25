@@ -185,13 +185,12 @@ async def delete_user(request_data: dict, authorization: str = Header(...), db=D
         user_service = UserService(user_repository=UserRepository(session=db))
         get_password = await user_service.get_password(user_id=user_id)
         if not verify_password(user_password, get_password):
-            delete_user_data = await user_service.get_password(user_id=user_id)
-            
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="비밀번호가 틀립니다.",
                 headers={"WWW-Authenticate": "Bearer"},
             )
+        delete_user_data = await user_service.delete_user(user_id=user_id)  # 이 부분에서 delete_user_data 변수를 할당
         return delete_user_data
     except JWTError:
         raise HTTPException(
@@ -199,6 +198,7 @@ async def delete_user(request_data: dict, authorization: str = Header(...), db=D
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )  
+
     
 @router.post(f"/{name}/login")
 async def login(
