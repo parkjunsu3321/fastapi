@@ -87,10 +87,10 @@ async def apiTest():
     return {"hello":"world"}
 
 
-@router.get(f"/{name}/getInfo") 
-async def plz(db=Depends(provide_session)):
+@router.get(f"/{name}/{{user_id}}")
+async def plz(user_id, db=Depends(provide_session),) -> UserItemGetResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
-    user_info = await user_service.get_user(user_id=3321)
+    user_info = await user_service.get_user(user_id=user_id)
     
     if user_info:
         return UserItemGetResponse(
