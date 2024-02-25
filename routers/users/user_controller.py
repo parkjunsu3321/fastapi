@@ -131,13 +131,12 @@ async def protected_endpoint(authorization: str = Header(...)):
 @router.post(f"/{name}/check_passwrod")
 async def check_passwrod(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)):
     user_password = request_data.get("user_password")
-    print(user_password)
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         user_id: int = payload.get("sub")
         user_service = UserService(user_repository=UserRepository(session=db))
-        get_password = await user_service.get_user(user_id=user_id)
+        get_password = await user_service.get_password(user_id=user_id)
         if not verify_password(user_password, get_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
