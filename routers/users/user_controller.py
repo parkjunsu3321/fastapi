@@ -129,7 +129,8 @@ async def protected_endpoint(authorization: str = Header(...)):
         )
     
 @router.post(f"/{name}/check_passwrod")
-async def check_passwrod(user_password: str,authorization: str = Header(...),db=Depends(provide_session)):
+async def check_passwrod(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)):
+    user_password = request_data.get("user_password")
     print(user_password)
     try:
         token = authorization.split("Bearer ")[1]
