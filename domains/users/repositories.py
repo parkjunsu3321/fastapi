@@ -53,9 +53,9 @@ class UserRepository:
             user = query.scalar()
             if user is not None:
                 user.password = new_password
-                return True
-            else:
-                return False
+                if user.password != new_password:
+                    return True
+        return False
 
 
     async def get_user_by_name(self, *, user_name: str):
