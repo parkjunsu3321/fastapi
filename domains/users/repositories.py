@@ -167,17 +167,14 @@ class GameMusicRepository:
             return game_music_list
 
 
-    async def Level_design(self, *,level: int, preferred_genre_list: List[str]):
-        async with self._session.begin():
-            game_list = []
-            if(level == 1):
-                game_list = await self.EasyGameListObj(preferred_genre_list=preferred_genre_list)
-                return game_list
-            elif(level == 2):
-                game_list = await self.NormalGameListObj(preferred_genre_list=preferred_genre_list)
-                return game_list
-            elif(level == 3):
-                return True
+    async def Level_design(self, *, level: int, preferred_genre_list: List[str]):
+        if level == 1:
+            game_list = await self.EasyGameListObj(preferred_genre_list=preferred_genre_list)
+        elif level == 2:
+            game_list = await self.NormalGameListObj()
+        elif level == 3:
+            return True
+        return game_list
             
 
 class GameResultRepository:
