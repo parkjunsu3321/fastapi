@@ -241,7 +241,7 @@ async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(..
         )
     
 @router.post(f"/{name}/create_list")
-async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)) -> List[str]:
+async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)) -> List[List[str]]:
     game_music_service = GameMusicService(game_music_repository=GameMusicRepository(session=db))
     user_service = UserService(user_repository=UserRepository(session=db))
     level = request_data.get("level")
