@@ -98,5 +98,5 @@ class GameMusicService(Service):
         self._game_music_repository = game_music_repository
 
     async def Level_design(self, *, level: int, user_id: int):
-        game_list = await self._game_music_repository.Level_design(level=level)
+        game_list = await self._game_music_repository.Level_design(level=level,user_id=user_id)
         return game_list
