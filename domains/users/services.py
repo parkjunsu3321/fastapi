@@ -89,14 +89,14 @@ class GameResultService(Service):
                 )
         return game_results
 
-class GameResultService(Service):
+class GameMusicService(Service):
     def __init__(
         self,
         *,
-        game_result_repository: GameMusicRepository,
+        game_music_repository: GameMusicRepository,
     ):
-        self._game_result_repository = game_result_repository
+        self._game_music_repository = game_music_repository
 
     async def Level_design(self, *, level: int):
-        game_list = await self._game_result_repository.Level_design(level=level)
+        game_list = await self._game_music_repository.Level_design(level=level)
         return game_list

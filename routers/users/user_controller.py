@@ -27,6 +27,7 @@ from domains.users.services import GameResultService
 from domains.users.repositories import GameResultRepository
 from domains.users.services import GameResultService
 from domains.users.repositories import GameMusicRepository
+from domains.users.services import GameMusicService
 from pydantic import BaseModel
 from domains.users.models import GameResultModel
 
@@ -239,13 +240,13 @@ async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(..
     
 @router.post(f"/{name}/create_list")
 async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)):
-    gameresult_service = GameResultService(gameresult_repository=GameMusicRepository(session=db))
+    game_music_service = GameMusicService(game_music_repository=GameMusicRepository(session=db))
     level = request_data.get("level")
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         user_id: int = payload.get("sub")
-        game_list = await gameresult_service.Level_design(level=level)
+        game_list = await game_music_service.Level_design(level=level)
         return game_list
     except JWTError:
         raise HTTPException(
