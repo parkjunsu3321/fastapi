@@ -30,6 +30,7 @@ from domains.users.repositories import GameMusicRepository
 from domains.users.services import GameMusicService
 from pydantic import BaseModel
 from domains.users.models import GameResultModel
+from domains.users.models import GameMusicModel
 
 class LoginForm(BaseModel):
     user_name: str
@@ -239,15 +240,21 @@ async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(..
         )
     
 @router.post(f"/{name}/create_list")
-async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)):
+async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session))->List[str]:
     game_music_service = GameMusicService(game_music_repository=GameMusicRepository(session=db))
     level = request_data.get("level")
+    game_list = List[GameMusicModel]
+    chart_list = List[str]
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         user_id: int = payload.get("sub")
         game_list = await game_music_service.Level_design(level=level)
-        return game_list
+        i = 0
+        while game_list[i] != None:
+            chart_list[i] = game_list[i].game_music_id
+            i+1
+        return chart_list
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

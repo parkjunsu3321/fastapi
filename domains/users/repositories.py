@@ -99,9 +99,9 @@ class GameMusicRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
     
-    async def NormalGameListObj(self):
+    async def NormalGameListObj(self)->List[GameMusicModel]:
         async with self._session.begin():
-            game_music_list = []
+            game_music_list = List[GameMusicModel]
             genres = ["발라드", "힙합", "댄스", "락", "R&B"]
             for genre in genres:
                 # 각 장르에서 랜덤하게 2개의 음악을 선택
