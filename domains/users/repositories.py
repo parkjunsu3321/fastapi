@@ -137,9 +137,7 @@ class GameMusicRepository:
             elif i == 1:
                 limit = 3
             elif i == 2:
-                limit = 2
-            else:
-                limit = 1
+                limit = 3
             result = await self._session.execute(query.limit(limit))
             selected_music = result.scalars().all()
             if selected_music:
