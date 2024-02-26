@@ -111,10 +111,9 @@ class GameMusicRepository:
                     .order_by(func.random())
                     .limit(2)
                 )
-            result = await self._session.execute(query)
-            list_obj = result.scalars().all()  # 여기서 await 제거
-            game_music_list.extend(list_obj)
-        return game_music_list
+                result = await self._session.execute(query)
+                game_music_list.extend(result.scalars().all())
+            return game_music_list
 
     async def Level_design(self, level: int):
         game_list = []
