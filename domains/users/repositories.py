@@ -107,7 +107,7 @@ class GameMusicRepository:
                 # 각 장르에서 랜덤하게 2개의 음악을 선택
                 query = (
                     select(GameMusicModel)
-                    .filter(GameMusicModel.genre == genre)
+                    .filter(GameMusicModel.game_music_genre_name == genre)
                     .order_by(func.random())
                     .limit(2)
                 )
