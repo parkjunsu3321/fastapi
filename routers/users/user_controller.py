@@ -240,20 +240,20 @@ async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(..
         )
     
 @router.post(f"/{name}/create_list")
-async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session))->List[str]:
+async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)) -> List[str]:
     game_music_service = GameMusicService(game_music_repository=GameMusicRepository(session=db))
     level = request_data.get("level")
-    game_list = List[GameMusicModel]
-    chart_list = List[str]
+    game_list: List[GameMusicModel] = []  # game_list 초기화
+    chart_list: List[str] = []  # chart_list 초기화
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         user_id: int = payload.get("sub")
         game_list = await game_music_service.Level_design(level=level)
         i = 0
-        while game_list[i] != None:
-            chart_list[i] = game_list[i].game_music_id
-            i+1
+        while i < len(game_list):  # game_list[i]가 None이 아니라 리스트의 범위를 넘어가면 종료하도록 수정
+            chart_list.append(game_list[i].game_music_id)  # chart_list에 요소 추가
+            i += 1  # i를 증가시켜 무한루프를 방지
         return chart_list
     except JWTError:
         raise HTTPException(
