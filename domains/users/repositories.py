@@ -108,72 +108,69 @@ class GameMusicRepository:
     async def NormalGameListObj(self) -> List[GameMusicModel]:
         game_music_list = []
         genres = ["발라드", "힙합", "댄스", "락", "R&B"]
-        async with self._session.begin():
-            for genre in genres:
-                # 각 장르에서 랜덤하게 2개의 음악을 선택
-                query = (
-                    select(GameMusicModel)
-                    .filter(GameMusicModel.game_music_genre_name == genre)
-                    .order_by(func.random())
-                    .limit(2)
-                )
-                result = await self._session.execute(query)
-                selected_music = result.scalars().all()
-                if selected_music:
-                    game_music_list.extend(selected_music)
+        for genre in genres:
+            # 각 장르에서 랜덤하게 2개의 음악을 선택
+            query = (
+                select(GameMusicModel)
+                .filter(GameMusicModel.game_music_genre_name == genre)
+                .order_by(func.random())
+                .limit(2)
+            )
+            result = await self._session.execute(query)
+            selected_music = result.scalars().all()
+            if selected_music:
+                game_music_list.extend(selected_music)
         return game_music_list
 
     async def EasyGameListObj(self, *, preferred_genre_list: List[str]) -> List[GameMusicModel]:
         game_music_list = []
-        async with self._session.begin():
-            # 각 장르별로 game_music_id를 선택하는 로직 추가
-            for i, genre in enumerate(preferred_genre_list):
-                query = (
-                    select(GameMusicModel)
-                    .filter(GameMusicModel.game_music_genre_name == genre)
-                    .order_by(func.random())
-                )
-                # 선호하는 장르의 수에 따라 선택할 game_music_id의 개수 설정
-                if i == 0:
-                    limit = 4
-                elif i == 1:
-                    limit = 3
-                elif i == 2:
-                    limit = 2
-                else:
-                    limit = 1
-                result = await self._session.execute(query.limit(limit))
-                selected_music = result.scalars().all()
-                if selected_music:
-                    game_music_list.extend(selected_music)
+        for i, genre in enumerate(preferred_genre_list):
+            query = (
+                select(GameMusicModel)
+                .filter(GameMusicModel.game_music_genre_name == genre)
+                .order_by(func.random())
+            )
+                            # 선호하는 장르의 수에 따라 선택할 game_music_id의 개수 설정
+            if i == 0:
+                limit = 4
+            elif i == 1:
+                limit = 3
+            elif i == 2:
+                limit = 2
+            else:
+                limit = 1
+            result = await self._session.execute(query.limit(limit))
+            selected_music = result.scalars().all()
+            if selected_music:
+                game_music_list.extend(selected_music)
         return game_music_list
         
     async def HardGameListObj(self, *, preferred_genre_list: List[str]) -> List[GameMusicModel]:
-        async with self._session.begin():
-            game_music_list = []
-            excluded_genres = [genre for genre in ["발라드", "힙합", "댄스", "락", "R&B"] if genre not in preferred_genre_list]
-            for genre in excluded_genres:
-                query = (
-                    select(GameMusicModel)
-                    .filter(GameMusicModel.game_music_genre_name == genre)
-                    .order_by(func.random())
-                    .limit(10)
-                )
-                result = await self._session.execute(query)
-                selected_music = result.scalars().all()
-                if selected_music:
-                    game_music_list.extend(selected_music)
-            return game_music_list
+        game_music_list = []
+        excluded_genres = [genre for genre in ["발라드", "힙합", "댄스", "락", "R&B"] if genre not in preferred_genre_list]
+        for genre in excluded_genres:
+            query = (
+                select(GameMusicModel)
+                .filter(GameMusicModel.game_music_genre_name == genre)
+                .order_by(func.random())
+                .limit(10)
+            )
+            result = await self._session.execute(query)
+            selected_music = result.scalars().all()
+            if selected_music:
+                game_music_list.extend(selected_music)
+        return game_music_list
 
 
     async def Level_design(self, *, level: int, preferred_genre_list: List[str]):
-        if level == 1:
-            game_list = await self.EasyGameListObj(preferred_genre_list=preferred_genre_list)
-        elif level == 2:
-            game_list = await self.NormalGameListObj()
-        elif level == 3:
-            return True
-        return game_list
+        async with self._session.begin():
+            if level == 1:
+                game_list = await self.EasyGameListObj(preferred_genre_list=preferred_genre_list)
+            elif level == 2:
+                game_list = await self.NormalGameListObj()
+            elif level == 3:
+                return True
+            return game_list
             
 
 class GameResultRepository:
