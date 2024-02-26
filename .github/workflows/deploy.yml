@@ -18,23 +18,29 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: codingloha321/fast-api-reaction
+          project: parkjunsu3321/postgresql
           stage: main
-          yaml: |
+          yaml: >
             name: fastapi
+
             app: python@3.9
+
             options:
               env:
                 - name: POSTGRESQL_ENDPOINT
-                  value: postgres
+                  value: svc.sel4.cloudtype.app
                 - name: POSTGRESQL_PORT
-                  value: "5432"
+                  value: "32752"
                 - name: POSTGRESQL_TABLE
                   value: reaction_db
                 - name: POSTGRESQL_USER
                   value: root
                 - name: POSTGRESQL_PASSWORD
                   value: "3321"
+                - name: JWT_SECRET_KEY
+                  value: 5c2fea6305c8c209714e73b265958703e65c4b40dec4c388dddac06f3f791ec7
+                - name: JWT_TOKEN_EXPIRE_MINUTES
+                  value: "600"
               ports: 8000
               start: uvicorn main:app --host=0.0.0.0 --port=8000
             context:
