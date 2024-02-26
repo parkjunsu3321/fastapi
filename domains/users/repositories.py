@@ -112,7 +112,10 @@ class GameMusicRepository:
                     .limit(2)
                 )
                 result = await self._session.execute(query)
-                game_music_list.extend(result.scalars().all())
+                list_obj = await result.scalars().all()
+                i = 0
+                for obj in list_obj:
+                    game_music_list.append(obj.game_music_id)
             return game_music_list
 
     async def Level_design(self, level: int):
