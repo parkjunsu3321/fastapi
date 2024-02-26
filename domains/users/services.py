@@ -1,3 +1,4 @@
+from typing import List
 from domains import Service
 from fastapi import HTTPException, status
 from dependencies.auth import hash_password
@@ -50,6 +51,9 @@ class UserService(Service):
         get_password = self._user_repository.get_password(user_id=user_id)
         return get_password
 
+    async def Input_Genre(self, *, genres: List[str], user_id: int):
+        Input_result = await self._user_repository.Input_Genre(genres = genres, user_id = user_id)
+        return Input_result
 
     async def get_user_by_name(self, *, user_name: str) -> UserModel:
         user_entity = await self._user_repository.get_user_by_name(

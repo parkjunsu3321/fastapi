@@ -199,7 +199,6 @@ async def delete_user(request_data: dict, authorization: str = Header(...), db=D
             headers={"WWW-Authenticate": "Bearer"},
         )  
 
-    
 @router.post(f"/{name}/login")
 async def login(
     login_data: LoginForm,
@@ -217,3 +216,20 @@ async def login(
 
     access_token = create_access_token(data={"sub": user.id})
     return Token(token=access_token, type="bearer")
+
+@router.post(f"/{name}/Input_Genre")
+async def Input_Genre(genre_array: UserPostRequest, authorization: str = Header(...)):
+    user_service = UserService(user_repository=UserRepository(session=db))
+    try:
+        token = authorization.split("Bearer ")[1]
+        payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
+        print("a")
+        user_id: int = payload.get("sub")
+        Input_result = await user_service.Input_Genre(genres = genre_array, user_id=user_id)
+        return Input_result
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )

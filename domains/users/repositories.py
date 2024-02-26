@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from sqlalchemy.future import select
@@ -67,7 +68,18 @@ class UserRepository:
                 return True  # 삭제 작업이 성공적으로 수행됨을 반환
         return False  # 삭제 작업 실패
 
-
+    async def Input_Genre(self, *, genres: List[str], user_id: str):
+        async with self._session.begin():
+            query = select(UserModel).filter(UserModel.id == user_id)
+            result = await self._session.execute(query)
+            user = result.scalar()
+            if user is not None:
+                user.flavor_genre_first = genres[0]
+                user.flavor_genre_second = genres[1]
+                user.flavor_genre_third = genres[2]
+                return True
+            else:
+                return False
 
     async def get_user_by_name(self, *, user_name: str):
         async with self._session.begin():
