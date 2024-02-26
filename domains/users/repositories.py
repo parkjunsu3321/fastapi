@@ -132,7 +132,7 @@ class GameMusicRepository:
             # 각 장르별로 game_music_id를 선택하는 로직 추가
             for i, genre in enumerate(preferred_genre_list):
                 query = (
-                    select(GameMusicModel.id)
+                    select(GameMusicModel)
                     .filter(GameMusicModel.game_music_genre_name == genre)
                     .order_by(func.random())
                 )
