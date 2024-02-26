@@ -64,6 +64,10 @@ class UserService(Service):
         )
         return user_entity
     
+    async def get_genre(self, *, user_id: int) -> List[str]:
+        user_genre_list = await self._user_repository.get_genre(user_id=user_id)
+        return user_genre_list
+
 class GameResultService(Service):
     def __init__(
         self,
@@ -97,6 +101,6 @@ class GameMusicService(Service):
     ):
         self._game_music_repository = game_music_repository
 
-    async def Level_design(self, *, level: int, user_id: int):
-        game_list = await self._game_music_repository.Level_design(level=level,user_id=user_id)
+    async def Level_design(self, *, level: int, preferred_genre_list: List[str]):
+        game_list = await self._game_music_repository.Level_design(level=level,preferred_genre_list=preferred_genre_list)
         return game_list

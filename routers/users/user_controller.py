@@ -242,13 +242,15 @@ async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(..
 @router.post(f"/{name}/create_list")
 async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)) -> List[str]:
     game_music_service = GameMusicService(game_music_repository=GameMusicRepository(session=db))
+    user_service = UserService(user_repository=UserRepository(session=db))
     level = request_data.get("level")
+    user_genre_list = await user_service.get_genre(user_id=user_id)
     chart_list: List[str] = []  # chart_list 초기화
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         user_id: int = payload.get("sub")
-        game_list = await game_music_service.Level_design(level=level, user_id=user_id)
+        game_list = await game_music_service.Level_design(level=level, preferred_genre_list=user_genre_list)
         if game_list is not None:  # game_list가 None이 아닐 때에만 반복문 실행
             for music in game_list:
                 chart_list.append(music.game_music_id)  # chart_list에 요소 추가

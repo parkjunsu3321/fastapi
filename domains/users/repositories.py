@@ -80,7 +80,7 @@ class UserRepository:
             else:
                 return False
 
-    async def Get_Genre(self, *, user_id: str):
+    async def get_genre(self, *, user_id: str):
         query = select(UserModel).filter(UserModel.id == user_id)
         result = await self._session.execute(query)
         user = result.scalar()
@@ -122,10 +122,8 @@ class GameMusicRepository:
                     game_music_list.extend(selected_music)
             return game_music_list
 
-    async def EasyGameListObj(self, session: AsyncSession, *, user_id: int) -> List[GameMusicModel]:
+    async def EasyGameListObj(self, *, preferred_genre_list: List[str]) -> List[GameMusicModel]:
         async with self._session.begin():
-            user_repository = UserRepository(session)
-            preferred_genre_list = await user_repository.Get_Genre(user_id=user_id)
         
             game_music_list = []
         
