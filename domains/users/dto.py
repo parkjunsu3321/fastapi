@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import List
 
 class UserItemGetResponse(BaseModel):
     class DTO(BaseModel):
@@ -19,9 +19,7 @@ class UserPostRequest(BaseModel):
     user_password: str
 
 class UserPostGenre(BaseModel):
-    first: str
-    second: str
-    third: str
+    genres: List[str]
 
 class UserPostResponse(BaseModel):
     id: int

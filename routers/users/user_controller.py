@@ -226,7 +226,7 @@ async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(..
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         print("a")
         user_id: int = payload.get("sub")
-        Input_result = await user_service.Input_Genre(genres = genre_array, user_id=user_id)
+        Input_result = await user_service.Input_Genre(genres = genre_array.genres, user_id=user_id)
         return Input_result
     except JWTError:
         raise HTTPException(
