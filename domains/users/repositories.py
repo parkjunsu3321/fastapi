@@ -131,7 +131,6 @@ class GameMusicRepository:
                 .filter(GameMusicModel.game_music_genre_name == genre)
                 .order_by(func.random())
             )
-                            # 선호하는 장르의 수에 따라 선택할 game_music_id의 개수 설정
             if i == 0:
                 limit = 4
             elif i == 1:
@@ -168,7 +167,7 @@ class GameMusicRepository:
             elif level == 2:
                 game_list = await self.NormalGameListObj()
             elif level == 3:
-                return True
+                game_list = await self.HardGameListObj(preferred_genre_list=preferred_genre_list)
             return game_list
             
 
