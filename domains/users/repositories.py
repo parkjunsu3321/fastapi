@@ -80,7 +80,7 @@ class UserRepository:
             else:
                 return False
 
-    async def get_genre(self, *, user_id: str):
+    async def get_genre(self, *, user_id: int):
         query = select(UserModel).filter(UserModel.id == user_id)
         result = await self._session.execute(query)
         user = result.scalar()
