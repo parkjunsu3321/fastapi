@@ -10,6 +10,7 @@ from domains.users.dto import (
     UserItemGetResponse,
     UserPostRequest,
     UserPostResponse,
+    UserPostGenre,
 )
 from dependencies.database import provide_session
 from dependencies.config import get_config
@@ -218,7 +219,7 @@ async def login(
     return Token(token=access_token, type="bearer")
 
 @router.post(f"/{name}/Input_Genre")
-async def Input_Genre(genre_array: UserPostRequest, authorization: str = Header(...),db=Depends(provide_session)):
+async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(...),db=Depends(provide_session)):
     user_service = UserService(user_repository=UserRepository(session=db))
     try:
         token = authorization.split("Bearer ")[1]

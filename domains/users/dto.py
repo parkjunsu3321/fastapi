@@ -18,6 +18,10 @@ class UserPostRequest(BaseModel):
     user_name: str
     user_password: str
 
+class UserPostGenre(BaseModel):
+    first: str
+    second: str
+    third: str
 
 class UserPostResponse(BaseModel):
     id: int
