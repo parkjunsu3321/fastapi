@@ -149,10 +149,8 @@ class GameMusicRepository:
                     game_music_list.extend(selected_music)
             return game_music_list
         
-    async def HardGameListObj(self, session: AsyncSession, *, user_id: int) -> List[GameMusicModel]:
+    async def HardGameListObj(self, *, preferred_genre_list: List[str]) -> List[GameMusicModel]:
         async with self._session.begin():
-            user_repository = UserRepository(session)
-            preferred_genre_list = await user_repository.Get_Genre(user_id=user_id)
             game_music_list = []
             excluded_genres = [genre for genre in ["발라드", "힙합", "댄스", "락", "R&B"] if genre not in preferred_genre_list]
             for genre in excluded_genres:
@@ -169,12 +167,12 @@ class GameMusicRepository:
             return game_music_list
 
 
-    async def Level_design(self, level: int, user_id: int):
+    async def Level_design(self, level: int, preferred_genre_list: List[str]):
         game_list = []
         if(level == 1):
-            game_list = await self.EasyGameListObj(session=self._session, user_id=user_id)
+            game_list = await self.EasyGameListObj(preferred_genre_list=preferred_genre_list)
         elif(level == 2):
-            game_list = await self.NormalGameListObj()
+            game_list = await self.NormalGameListObj(preferred_genre_list=preferred_genre_list)
             return game_list
         elif(level == 3):
             return True
