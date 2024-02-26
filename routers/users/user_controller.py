@@ -1,4 +1,5 @@
 import arrow
+from typing import List
 from fastapi import APIRouter, HTTPException, status, Form, Depends
 from dependencies.database import provide_session
 from fastapi import Header
@@ -25,6 +26,7 @@ from domains.users.dto import GameResultItemGetResponse
 from domains.users.services import GameResultService
 from domains.users.repositories import GameResultRepository
 from pydantic import BaseModel
+from domains.users.models import GameResultModel
 
 class LoginForm(BaseModel):
     user_name: str
@@ -62,23 +64,21 @@ async def checkId(
     )
     return checking
 
-@router.get(f'/{result}/{"all"}')
+@router.get(f'/{result}/all')
 async def get(db=Depends(provide_session)):
     gameresult_service = GameResultService(game_result_repository=GameResultRepository(session=db))
     game_result_info = await gameresult_service.get_all_game_results()
-    
-    if game_result_info:
-        return GameResultItemGetResponse(
-            data=GameResultItemGetResponse.DTO(
-                order_data=game_result_info.order_data,
-                game_result_player_id=game_result_info.game_result_player_id,
-                game_result_music_id=game_result_info.game_result_music_id,
-                game_result_score=game_result_info.game_result_score,
-                game_result_created_time=str(game_result_info.game_result_created_time),  # Convert to string
-            )
-        ).dict()
+    sortting_game_result = await SettingGameResult(game_results=game_result_info)
+    if sortting_game_result is not None:
+        return sortting_game_result
     else:
-        return {"message": "게임 결과를 찾을 수 없습니다."}  # Or any appropriate response
+        return None
+
+async def SettingGameResult(game_results: List[GameResultModel]) -> List[GameResultModel]:
+    sorted_results = sorted(game_results, key=lambda x: x.game_result_score, reverse=True)
+    top_seven_results = sorted_results[:7]
+    return top_seven_results
+
 
 @router.get("/test/") 
 async def apiTest():

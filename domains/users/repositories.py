@@ -112,7 +112,7 @@ class GameResultRepository:
                 order_data = 0
             else:
                 order_data = last_order_data + 1
-
+            
             game_result_entity = GameResultModel(
                 order_data=order_data,
                 game_result_player_id=player_id,
