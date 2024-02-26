@@ -6,6 +6,9 @@ from .repositories import UserRepository
 from .models import UserModel
 from .repositories import GameResultRepository
 from .models import GameResultModel
+from .repositories import GameMusicRepository
+from .models import GameMusicModel
+
 
 class UserService(Service):
     def __init__(
@@ -85,3 +88,15 @@ class GameResultService(Service):
                 detail="No game results found",
                 )
         return game_results
+
+class GameResultService(Service):
+    def __init__(
+        self,
+        *,
+        game_result_repository: GameMusicRepository,
+    ):
+        self._game_result_repository = game_result_repository
+
+    async def Level_design(self, *, level: int):
+        game_list = await self._game_result_repository.Level_design(level=level)
+        return game_list

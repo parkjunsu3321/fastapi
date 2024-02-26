@@ -25,6 +25,8 @@ from dependencies.auth import(
 from domains.users.dto import GameResultItemGetResponse
 from domains.users.services import GameResultService
 from domains.users.repositories import GameResultRepository
+from domains.users.services import GameResultService
+from domains.users.repositories import GameMusicRepository
 from pydantic import BaseModel
 from domains.users.models import GameResultModel
 
@@ -228,6 +230,23 @@ async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(..
         user_id: int = payload.get("sub")
         Input_result = await user_service.Input_Genre(genres = genre_array.genres, user_id=user_id)
         return Input_result
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+@router.post(f"/{name}/create_list")
+async def Create_List(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)):
+    gameresult_service = GameResultService(gameresult_repository=GameMusicRepository(session=db))
+    level = request_data.get("level")
+    try:
+        token = authorization.split("Bearer ")[1]
+        payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
+        user_id: int = payload.get("sub")
+        game_list = await gameresult_service.Level_design(level=level)
+        return game_list
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

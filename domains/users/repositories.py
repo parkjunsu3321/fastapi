@@ -4,7 +4,8 @@ from fastapi import HTTPException, status
 from sqlalchemy.future import select
 from .models import UserModel
 from .models import GameResultModel
-
+from .models import GameMusicModel
+from sqlalchemy import func
 
 class UserRepository:
     def __init__(self, session: AsyncSession):
@@ -97,8 +98,33 @@ class UserRepository:
 class GameMusicRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
-
     
+    async def NormalGameListObj(self):
+        async with self._session.begin():
+            game_music_list = []
+            genres = ["발라드", "힙합", "댄스", "락", "R&B"]
+            for genre in genres:
+                # 각 장르에서 랜덤하게 2개의 음악을 선택
+                query = (
+                    select(GameMusicModel)
+                    .filter(GameMusicModel.genre == genre)
+                    .order_by(func.random())
+                    .limit(2)
+                )
+                result = await self._session.execute(query)
+                game_music_list.extend(result.scalars().all())
+            return game_music_list
+
+    async def Level_design(self, level: int):
+        game_list = []
+        if(level == 1):
+            return True
+        elif(level == 2):
+            game_list = await self.NormalGameListObj()
+            return game_list
+        elif(level == 3):
+            return True
+            
 
 class GameResultRepository:
     def __init__(self, session: AsyncSession):
