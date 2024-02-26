@@ -44,9 +44,7 @@ class UserRepository:
             user_password = query.scalar().password
 
             if user_password is not None:
-                # 사용자가 존재하면 해당 사용자의 비밀번호를 반환
                 return user_password 
-        # 사용자가 존재하지 않으면 None을 반환
         return None
 
     async def change_password(self, *, user_id: int, new_password: str):
@@ -81,6 +79,17 @@ class UserRepository:
                 return True
             else:
                 return False
+
+    async def Get_Genre(self, *, user_id: str):
+        async with self._session.begin():
+            query = select(UserModel).filter(UserModel.id == user_id)
+            result = await self._session.execute(query)
+            user = result.scalar()
+            returnValue = List[str]
+            returnValue[0] = user.flavor_genre_first
+            returnValue[1] = user.flavor_genre_first
+            returnValue[2] = user.flavor_genre_first
+            return returnValue
 
     async def get_user_by_name(self, *, user_name: str):
         async with self._session.begin():
@@ -117,10 +126,40 @@ class GameMusicRepository:
                     game_music_list.extend(selected_music)
             return game_music_list
 
-    async def Level_design(self, level: int):
+    async def EasyGameListObj(self, *, user_id: int) -> List[GameMusicModel]:
+        async with self._session.begin():
+            user_repository = UserRepository(self._session)
+            preferred_genre_list = await user_repository.Get_Genre(user_id=user_id)
+        
+            game_music_list = []
+        
+            # 각 장르별로 game_music_id를 선택하는 로직 추가
+            for i, genre in enumerate(preferred_genre_list):
+                query = (
+                    select(GameMusicModel.id)
+                    .filter(GameMusicModel.game_music_genre_name == genre)
+                    .order_by(func.random())
+                )
+                # 선호하는 장르의 수에 따라 선택할 game_music_id의 개수 설정
+                if i == 0:
+                    limit = 4
+                elif i == 1:
+                    limit = 3
+                elif i == 2:
+                    limit = 2
+                else:
+                    limit = 1
+                result = await self._session.execute(query.limit(limit))
+                selected_music = result.scalars().all()
+                if selected_music:
+                    game_music_list.extend(selected_music)
+            return game_music_list
+
+
+    async def Level_design(self, level: int, user_id: int):
         game_list = []
         if(level == 1):
-            return True
+            game_list = await self.EasyGameListObj(user_id=user_id)
         elif(level == 2):
             game_list = await self.NormalGameListObj()
             return game_list
