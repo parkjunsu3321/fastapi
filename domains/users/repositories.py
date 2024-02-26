@@ -126,9 +126,9 @@ class GameMusicRepository:
                     game_music_list.extend(selected_music)
             return game_music_list
 
-    async def EasyGameListObj(self, *, user_id: int) -> List[GameMusicModel]:
+    async def EasyGameListObj(self, session: AsyncSession, *, user_id: int) -> List[GameMusicModel]:
         async with self._session.begin():
-            user_repository = UserRepository(self._session)
+            user_repository = UserRepository(session)
             preferred_genre_list = await user_repository.Get_Genre(user_id=user_id)
         
             game_music_list = []
@@ -154,12 +154,31 @@ class GameMusicRepository:
                 if selected_music:
                     game_music_list.extend(selected_music)
             return game_music_list
+        
+    async def HardGameListObj(self, session: AsyncSession, *, user_id: int) -> List[GameMusicModel]:
+        async with self._session.begin():
+            user_repository = UserRepository(session)
+            preferred_genre_list = await user_repository.Get_Genre(user_id=user_id)
+            game_music_list = []
+            excluded_genres = [genre for genre in ["발라드", "힙합", "댄스", "락", "R&B"] if genre not in preferred_genre_list]
+            for genre in excluded_genres:
+                query = (
+                    select(GameMusicModel)
+                    .filter(GameMusicModel.game_music_genre_name == genre)
+                    .order_by(func.random())
+                    .limit(10)
+                )
+                result = await self._session.execute(query)
+                selected_music = result.scalars().all()
+                if selected_music:
+                    game_music_list.extend(selected_music)
+            return game_music_list
 
 
     async def Level_design(self, level: int, user_id: int):
         game_list = []
         if(level == 1):
-            game_list = await self.EasyGameListObj(user_id=user_id)
+            game_list = await self.EasyGameListObj(session=self._session, user_id=user_id)
         elif(level == 2):
             game_list = await self.NormalGameListObj()
             return game_list
