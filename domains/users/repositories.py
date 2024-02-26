@@ -81,15 +81,11 @@ class UserRepository:
                 return False
 
     async def Get_Genre(self, *, user_id: str):
-        async with self._session.begin():
-            query = select(UserModel).filter(UserModel.id == user_id)
-            result = await self._session.execute(query)
-            user = result.scalar()
-            returnValue = List[str]
-            returnValue[0] = user.flavor_genre_first
-            returnValue[1] = user.flavor_genre_first
-            returnValue[2] = user.flavor_genre_first
-            return returnValue
+        query = select(UserModel).filter(UserModel.id == user_id)
+        result = await self._session.execute(query)
+        user = result.scalar()
+        returnValue = [user.flavor_genre_first, user.flavor_genre_second, user.flavor_genre_third]
+        return returnValue
 
     async def get_user_by_name(self, *, user_name: str):
         async with self._session.begin():
