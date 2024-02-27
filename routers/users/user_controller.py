@@ -54,6 +54,7 @@ async def create(
         user_name=payload.user_name,
         user_pw=payload.user_password,
     )
+
     return UserPostResponse(id=user_id).dict()
 
 @router.post(f"/{name}/checkId")
@@ -62,6 +63,7 @@ async def checkId(
     db=Depends(provide_session),
 ) -> bool:
     user_service = UserService(user_repository=UserRepository(session=db))
+
     checking = await user_service.checkname_user(
         user_name=payload.user_name,
     )
@@ -114,7 +116,7 @@ async def getInfo(user_id, db=Depends(provide_session),) -> UserItemGetResponse:
     
 
 @router.post(f"/{name}/checklogin")
-async def protected_endpoint(authorization: str = Header(...), db=Depends(provide_session))->bool:
+async def checklogin(authorization: str = Header(...), db=Depends(provide_session))->bool:
     user_service = UserService(user_repository=UserRepository(session=db))
     try:
         token = authorization.split("Bearer ")[1]
