@@ -192,8 +192,7 @@ async def check_passwrod(request_data: dict, authorization: str = Header(...), d
         )
 
 @router.delete(f"/{name}/delete_user")
-async def delete_user(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)):
-    user_password = request_data.get("user_password")
+async def delete_user(user_password: str, authorization: str = Header(...), db=Depends(provide_session)):
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
@@ -213,7 +212,8 @@ async def delete_user(request_data: dict, authorization: str = Header(...), db=D
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
-        )  
+        )
+
 
 @router.post(f"/{name}/login")
 async def login(
@@ -229,7 +229,6 @@ async def login(
             detail="비밀번호가 틀립니다.",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
     access_token = create_access_token(data={"sub": user.id})
     return Token(token=access_token, type="bearer")
 
