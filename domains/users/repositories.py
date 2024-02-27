@@ -175,7 +175,7 @@ class GameResultRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def create_game_result(self, *, player_id: int, music_genre: str, score: int):
+    async def create_game_result(self, *, player_id: str, score: int):
         async with self._session.begin():
             last_order_data = await self._session.execute(select(func.max(GameResultModel.order_data)).scalar())
 
@@ -187,7 +187,6 @@ class GameResultRepository:
             game_result_entity = GameResultModel(
                 order_data=order_data,
                 game_result_player_id=player_id,
-                game_result_music_id=music_genre,
                 game_result_socre=score
             )
 

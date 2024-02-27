@@ -76,10 +76,9 @@ class GameResultService(Service):
     ):
         self._game_result_repository = game_result_repository
 
-    async def create_game_result(self, *, player_id: int, music_genre: str, score: int) -> int:
+    async def create_game_result(self, *, player_id: str, score: int) -> int:
         order_data = await self._game_result_repository.create_game_result(
             player_id=player_id,
-            music_genre=music_genre,
             score=score,
         )
         return order_data
