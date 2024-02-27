@@ -37,6 +37,11 @@ class LoginForm(BaseModel):
     user_name: str
     user_password: str
 
+class GenreForm(BaseModel):
+    first_genre: str
+    second_genre: str
+    third_genre: str
+
 conf_vars = get_config()
 secret_key = conf_vars.jwt_secret_key
 name = "users"
@@ -229,12 +234,13 @@ async def login(
     return Token(token=access_token, type="bearer")
 
 @router.post(f"/{name}/Input_Genre")
-async def Input_Genre(genre_array: List[str], authorization: str = Header(...),db=Depends(provide_session)):
+async def Input_Genre(genre_data: GenreForm, authorization: str = Header(...),db=Depends(provide_session)):
     user_service = UserService(user_repository=UserRepository(session=db))
     try:
+        genre_array = List[str]
+        genre_array = [genre_data.first_genre, genre_data.second_genre, genre_data.third_genre]
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
-        print("a")
         user_id: int = payload.get("sub")
         Input_result = await user_service.Input_Genre(genres = genre_array, user_id=user_id)
         return Input_result
