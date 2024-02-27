@@ -115,19 +115,17 @@ async def getInfo(user_id, db=Depends(provide_session),) -> UserItemGetResponse:
         return {"message": "User not found"}  # Or any appropriate response
     
 
-@router.post(f"/{name}/protected_endpoint")
-async def protected_endpoint(authorization: str = Header(...)):
-    print(authorization)
+@router.post(f"/{name}/checklogin")
+async def checklogin(authorization: str = Header(...), db=Depends(provide_session))->bool:
+    user_service = UserService(user_repository=UserRepository(session=db))
     try:
         token = authorization.split("Bearer ")[1]
-        print(token)
-        print(secret_key,ALGORITHM)
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
-        print("a")
         user_id: int = payload.get("sub")
-        print(payload.get("sub"))
-        # 여기서 user_id를 사용하여 해당 사용자의 데이터를 처리하거나 작업을 수행할 수 있습니다.
-        return {"message": f"Welcome user {user_id} to the protected endpoint"}
+        user_check_login = user_service.get_user(user_id=user_id)
+        if user_check_login is not None:
+            return True
+        return False
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
