@@ -229,14 +229,14 @@ async def login(
     return Token(token=access_token, type="bearer")
 
 @router.post(f"/{name}/Input_Genre")
-async def Input_Genre(genre_array: UserPostGenre, authorization: str = Header(...),db=Depends(provide_session)):
+async def Input_Genre(genre_array: List[str], authorization: str = Header(...),db=Depends(provide_session)):
     user_service = UserService(user_repository=UserRepository(session=db))
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
         print("a")
         user_id: int = payload.get("sub")
-        Input_result = await user_service.Input_Genre(genres = genre_array.genres, user_id=user_id)
+        Input_result = await user_service.Input_Genre(genres = genre_array, user_id=user_id)
         return Input_result
     except JWTError:
         raise HTTPException(
