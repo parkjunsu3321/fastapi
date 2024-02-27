@@ -168,6 +168,8 @@ class GameMusicRepository:
                 game_list = await self.NormalGameListObj()
             elif level == 3:
                 game_list = await self.HardGameListObj(preferred_genre_list=preferred_genre_list)
+            else:
+                raise ValueError("Invalid level value. Level must be 1, 2, or 3.")
             return game_list
             
 
