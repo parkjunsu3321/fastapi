@@ -301,7 +301,7 @@ def levenshtein_distance(s1, s2):
     return previous_row[-1]
 
 
-@router.get(f"/{name}/textembedding")
+@router.post(f"/{name}/textembedding")
 async def textembedding(embedding: TextEmbed):
     try:
         levenshtein_dist = levenshtein_distance(embedding.input, embedding.answer)
