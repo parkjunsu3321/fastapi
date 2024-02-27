@@ -265,7 +265,6 @@ async def Create_List(request_data: dict, authorization: str = Header(...), db=D
         game_list = await game_music_service.Level_design(level=level, preferred_genre_list=preferred_genre_list)
         if game_list is not None:  # game_list가 None이 아닐 때에만 반복문 실행
             for music in game_list:
-                random.shuffle(game_list)
                 chart_list.append([music.game_music_id, music.game_music_link_fragment])  # chart_list에 요소 추가
         return chart_list
     except JWTError:
