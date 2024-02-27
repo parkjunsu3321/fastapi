@@ -308,6 +308,26 @@ async def textembedding(embedding: TextEmbed):
         # 문자열 길이에 대한 유사성 계산
         max_len = max(len(embedding.input), len(embedding.answer))
         similarity_percentage = ((max_len - levenshtein_dist) / max_len) * 100
-        return similarity_percentage > 95 
+        return similarity_percentage >= 90 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post(f"/{name}/input_result")
+async def input_result(request_data: int, authorization: str = Header(...), db=Depends(provide_session))->bool:
+    score = request_data.get("score")
+    try:
+        token = authorization.split("Bearer ")[1]
+        payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
+        user_id: int = payload.get("sub")
+        gameresult = GameResultService(user_repository=GameResultModel(session=db))
+        result_data = gameresult.create_game_result(user_id=user_id, score=score)
+        if result_data is not None:
+            return True
+        else:
+            return False
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
