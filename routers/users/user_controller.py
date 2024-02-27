@@ -93,7 +93,7 @@ async def apiTest():
 
 
 @router.post(f"/{name}/getInfo")
-async def getInfo(authorization: str = Header(...), db=Depends(provide_session),) -> UserItemGetResponse:
+async def getInfo(authorization: str = Header(...), db=Depends(provide_session)) -> UserItemGetResponse:
     user_service = UserService(user_repository=UserRepository(session=db))
     try:
         token = authorization.split("Bearer ")[1]
@@ -186,7 +186,7 @@ async def check_passwrod(request_data: dict, authorization: str = Header(...), d
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-@router.post(f"/{name}/delete_user")
+@router.delete(f"/{name}/delete_user")
 async def delete_user(request_data: dict, authorization: str = Header(...), db=Depends(provide_session)):
     user_password = request_data.get("user_password")
     try:
