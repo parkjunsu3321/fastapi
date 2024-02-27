@@ -192,7 +192,7 @@ async def check_passwrod(request_data: dict, authorization: str = Header(...), d
         )
 
 @router.delete(f"/{name}/delete_user")
-async def delete_user(user_password: str, authorization: str = Header(...), db=Depends(provide_session)):
+async def delete_user(user_password: str = Query(...), authorization: str = Header(...), db=Depends(provide_session)):
     try:
         token = authorization.split("Bearer ")[1]
         payload = jwt.decode(token, secret_key, algorithms=[ALGORITHM])
@@ -213,6 +213,7 @@ async def delete_user(user_password: str, authorization: str = Header(...), db=D
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
 
 
 @router.post(f"/{name}/login")
