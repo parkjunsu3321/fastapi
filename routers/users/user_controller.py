@@ -313,7 +313,7 @@ async def textembedding(embedding: TextEmbed):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post(f"/{name}/input_result")
-async def input_result(request_data: int, authorization: str = Header(...), db=Depends(provide_session))->bool:
+def input_result(request_data: int, authorization: str = Header(...), db=Depends(provide_session))->bool:
     score = request_data.get("score")
     try:
         token = authorization.split("Bearer ")[1]
